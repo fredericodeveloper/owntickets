@@ -28,16 +28,6 @@ def get_ticket_channel_message_info(server_id: int):
     else:
         return None, None
 
-def get_language(server_id: int):
-    conn = db.get_conn()
-    cursor = conn.cursor()
-    result = cursor.execute("SELECT language FROM server_info WHERE server_id = ?", (server_id,)).fetchone()
-
-    if result:
-        return result[0]
-    else:
-        return None
-
 def unset_initialized(server_id: int):
     conn = db.get_conn()
     cursor = conn.cursor()

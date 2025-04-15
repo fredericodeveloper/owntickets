@@ -154,7 +154,7 @@ async def init(ctx, language: str):
 async def reset(ctx):
     server_id = ctx.guild.id
 
-    language = utils.get_language(server_id)
+    language = lang.get_lang_from_guild(ctx.guild)
 
     user = ctx.author
     if not user.guild_permissions.administrator:
