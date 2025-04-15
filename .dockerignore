@@ -1,0 +1,7 @@
+.venv
+.env
+owntickets.db
+.ropeproject
+__pycache__
+.gitignore
+.git

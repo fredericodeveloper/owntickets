@@ -1,0 +1,5 @@
+.venv
+.env
+owntickets.db
+.ropeproject
+__pycache__
