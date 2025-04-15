@@ -23,10 +23,6 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix='ticket!', intents=intents)
 
-@bot.event
-async def on_ready():
-    print(f'Logged in as {bot.user}')
-
 class TicketChannelButtons(discord.ui.View):
     def __init__(self, language: str):
         super().__init__(timeout=None)
@@ -50,12 +46,16 @@ class TicketChannelButtons(discord.ui.View):
         if guild is None:
             return
 
+        language = lang.get_lang_from_guild(guild)
+        if language == None:
+            language = "en"
+
         if 'ticketmanager' not in [role.name for role in interaction.user.roles]: # pyright: ignore
-            await interaction.response.send_message(lang.get_content(self.language, "no_permission"), ephemeral=True)
+            await interaction.response.send_message(lang.get_content(language, "no_permission"), ephemeral=True)
             return
 
         if not guild.me.guild_permissions.manage_channels:
-            await interaction.response.send_message(lang.get_content(self.language, "bot_no_permission"), ephemeral=True)
+            await interaction.response.send_message(lang.get_content(language, "bot_no_permission"), ephemeral=True)
             return
 
         await channel.delete() # pyright: ignore
@@ -79,16 +79,20 @@ class TicketButton(discord.ui.View):
         if guild is None:
             return
 
+        language = lang.get_lang_from_guild(guild)
+        if language == None:
+            language = "en"
+
         existing_channel = discord.utils.get(guild.text_channels, name=f'ticket-{interaction.user.name.replace(" ", "-")}')
         if existing_channel:
             await interaction.response.send_message(
-                lang.get_content(self.language, "ticket_exists_message"),
+                lang.get_content(language, "ticket_exists_message"),
                 ephemeral=True
             )
             return
 
         await interaction.response.send_message(
-            lang.get_content(self.language, "ticket_open_message"),
+            lang.get_content(language, "ticket_open_message"),
             ephemeral=True
         )
 
@@ -108,6 +112,16 @@ class TicketButton(discord.ui.View):
 
         # Send a message to the new ticket channel
         await private_channel.send(view=TicketChannelButtons(language=self.language))
+
+@bot.event
+async def on_ready():
+    print(f'Logged in as {bot.user}')
+    for guild in bot.guilds:
+        language = lang.get_lang_from_guild(guild)
+        if language == None:
+            language = "en"
+        bot.add_view(TicketChannelButtons(language))
+        bot.add_view(TicketButton(language))
 
 @bot.command()
 async def init(ctx, language: str):

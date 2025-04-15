@@ -1,5 +1,6 @@
 import os
 import yaml
+import db
 
 def list():
     languages = []
@@ -30,3 +31,13 @@ def get_content(lang, key):
                 en_data = yaml.safe_load(en_file)
                 content = en_data.get(key, key)
         return content
+
+def get_lang_from_guild(guild):
+    conn = db.get_conn()
+    cursor = conn.cursor()
+    cursor.execute("SELECT language FROM server_info WHERE server_id = ?", (guild.id,))
+    result = cursor.fetchone()
+    if result:
+        return result[0]
+    else:
+        return "en"
