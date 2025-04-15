@@ -1,5 +1,5 @@
 .venv
 .env
-owntickets.db
+data/
 .ropeproject
 __pycache__

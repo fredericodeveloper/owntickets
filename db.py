@@ -13,7 +13,7 @@ def table_exists(table_name):
 
 def init_db():
     global _conn
-    _conn = sqlite3.connect('owntickets.db')
+    _conn = sqlite3.connect('./data/owntickets.db')
     cursor = _conn.cursor()
     if not table_exists("app_data"):
         # Runs this section if it never been ran before
