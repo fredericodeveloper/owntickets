@@ -50,9 +50,9 @@ class TicketChannelButtons(discord.ui.View):
         if language == None:
             language = "en"
 
-        if 'ticketmanager' not in [role.name for role in interaction.user.roles]: # pyright: ignore
-            await interaction.response.send_message(lang.get_content(language, "no_permission"), ephemeral=True)
-            return
+        # if 'ticketmanager' not in [role.name for role in interaction.user.roles]: # pyright: ignore
+        #     await interaction.response.send_message(lang.get_content(language, "no_permission"), ephemeral=True)
+        #     return
 
         if not guild.me.guild_permissions.manage_channels:
             await interaction.response.send_message(lang.get_content(language, "bot_no_permission"), ephemeral=True)
@@ -97,12 +97,13 @@ class TicketButton(discord.ui.View):
         )
 
         # Create a private channel for the user who opened the ticket
-
+        role = discord.utils.get(guild.roles, name="ticketmanager")
         overwrites = {
             guild.default_role: discord.PermissionOverwrite(view_channel=False),
+            role: discord.PermissionOverwrite(view_channel=True, send_messages=True, read_messages=True),
             interaction.user: discord.PermissionOverwrite(send_messages=True, read_messages=True)
         }
-        role = discord.utils.get(guild.roles, name="ticketmanager")
+
         if role is not None:
             for member in guild.members:
                 if role in member.roles:
