@@ -15,6 +15,6 @@ services:
     restart: always
 ```
 - #### Run the bot using `docker compose up -d` (you might need to run it as root if you have not configured your docker to run rootless)
-- #### Invite your bot to server using this link (make sure to edit the application id):
+- #### Invite your bot to server using this link (make sure to edit the application id): https://discord.com/oauth2/authorize?client_id=YOUR_APPLICATION_ID&scope=bot&permissions=8&redirect_uri=https%3A%2F%2Fgithub.com%2Ffredericodeveloper%2Fowntickets
 ## Support:
 #### I offer free support for both selfhosted version and users of my hosted bot, if you have any issues with the bot, please open a issue here on github.
